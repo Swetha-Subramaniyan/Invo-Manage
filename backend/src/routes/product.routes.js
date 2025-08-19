@@ -11,7 +11,7 @@ const {
   exportProducts,
 } = require("../controllers/product.controller");
 const { protect } = require("../middlewares/auth.middleware");
-const {upload, uploadProductImage} = require('../middlewares/fileUpload.middleware');
+const {uploadCSV, uploadProductImage} = require('../middlewares/fileUpload.middleware');
 
 const router = express.Router();
 
@@ -46,7 +46,7 @@ router.route("/search").get(protect, searchProducts);
  * @access  Private
  * @file    CSV file with product data
  */
-router.post('/import',protect, upload.single('file'), importProducts);
+router.post('/import',protect, uploadCSV.single('file'), importProducts);
 
 /**
  * @route   GET /api/products/export
@@ -69,7 +69,7 @@ router
    * @access  Private
    * @body    {fields to update}
    */
-  .put(protect, updateProduct)
+  .put(protect, uploadProductImage.single('image'), updateProduct)
   /**
    * @route   DELETE /api/products/:id
    * @desc    Delete product

@@ -38,6 +38,10 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     default: 'no-photo.jpg'
   },
+  imagePublicId: { 
+    type: String,
+    default: null
+  },
   createdAt: {
     type: Date,
     default: Date.now

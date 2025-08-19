@@ -1,54 +1,43 @@
 const multer = require('multer');
-const path = require('path');
+const { storage, imageFileFilter } = require('../config/cloudinary.config');
 
-// Configure storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) { 
-    cb(null, 'src/uploaded_data/csv_files/'); 
+// For CSV uploads (keep your existing CSV configuration)
+const csvStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads/');
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
   }
 });
 
+const csvFileFilter = (req, file, cb) => {
+  const filetypes = /csv/;
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = filetypes.test(file.mimetype);
 
-const productImagesStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'src/uploaded_data/product_images/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-// File filter to allow only CSV files
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'text/csv') {
+  if (extname && mimetype) {
     cb(null, true);
   } else {
     cb(new Error('Only CSV files are allowed'), false);
   }
 };
 
-const imageFileFilter = (req, file, cb) => {
-  const filetypes = /jpe?g|png|webp/;
-  const mimetypes = /image\/jpe?g|image\/png|image\/webp/;
-
-  const extname = path.extname(file.originalname).toLowerCase();
-  const mimetype = file.mimetype;
-
-  if (filetypes.test(extname) && mimetypes.test(mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error("Images only"), false);
-  }
-};
-
-const uploadProductImage = multer({ 
-  storage: productImagesStorage, 
-  fileFilter: imageFileFilter 
+const uploadCSV = multer({
+  storage: csvStorage,
+  fileFilter: csvFileFilter,
+  limits: { fileSize: 1024 * 1024 * 5 }
 });
 
-const upload = multer({ storage, fileFilter });
+const uploadProductImage = multer({
+  storage: storage,
+  fileFilter: imageFileFilter,
+  limits: {
+    fileSize: 1024 * 1024 * 5 
+  }
+});
 
-module.exports = {upload, uploadProductImage};
+module.exports = {
+  uploadCSV,
+  uploadProductImage
+};
