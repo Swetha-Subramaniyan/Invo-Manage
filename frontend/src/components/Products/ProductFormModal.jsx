@@ -9,8 +9,9 @@ const ProductFormModal = ({ product, onClose, refreshProducts }) => {
     category: "Other",
     brand: "",
     stock: 0,
-    image: "",
+    image: null, // Change to null for file upload
   });
+  const [previewImage, setPreviewImage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -22,8 +23,9 @@ const ProductFormModal = ({ product, onClose, refreshProducts }) => {
         category: product.category,
         brand: product.brand,
         stock: product.stock,
-        image: product.image,
+        image: null, // Keep as null for file input
       });
+      setPreviewImage(product.image || "");
     }
   }, [product]);
 
@@ -35,17 +37,46 @@ const ProductFormModal = ({ product, onClose, refreshProducts }) => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, image: file }));
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      if (product) {
-        await productService.updateProduct(product._id, formData);
-      } else {
-        await productService.createProduct(formData);
+      const submitData = new FormData();
+      
+      // Append all form data
+      submitData.append('name', formData.name);
+      submitData.append('unit', formData.unit);
+      submitData.append('category', formData.category);
+      submitData.append('brand', formData.brand);
+      submitData.append('stock', formData.stock.toString());
+      
+      // Append image if selected
+      if (formData.image) {
+        submitData.append('image', formData.image);
       }
+
+      if (product) {
+        await productService.updateProduct(product._id, submitData);
+      } else {
+        await productService.createProduct(submitData);
+      }
+      
       refreshProducts();
       onClose();
     } catch (err) {
@@ -53,6 +84,11 @@ const ProductFormModal = ({ product, onClose, refreshProducts }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const removeImage = () => {
+    setFormData((prev) => ({ ...prev, image: null }));
+    setPreviewImage("");
   };
 
   return (
@@ -143,15 +179,31 @@ const ProductFormModal = ({ product, onClose, refreshProducts }) => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Image URL</label>
-            <input
-              type="text"
-              name="image"
-              value={formData.image}
-              onChange={handleChange}
-              placeholder="Leave empty for default image"
-              className="form-control"
-            />
+            <label className="form-label">Product Image</label>
+            {previewImage ? (
+              <div className="image-preview-container">
+                <img 
+                  src={previewImage} 
+                  alt="Preview" 
+                  className="image-preview"
+                />
+                <button 
+                  type="button" 
+                  onClick={removeImage}
+                  className="remove-image-btn"
+                >
+                  Remove Image
+                </button>
+              </div>
+            ) : (
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="form-control"
+              />
+            )}
           </div>
 
           <div className="btn-group">

@@ -3,8 +3,8 @@ const InventoryHistory = require("../../models/InventoryHistory.model");
 const ErrorResponse = require("../utils/errorResponse.util");
 const parseCSV = require("../utils/csvParser.util");
 const cloudinary = require("../config/cloudinary.config.js");
-const fs = require('fs');
-const csv = require('csv-parser');
+const fs = require("fs");
+const csv = require("csv-parser");
 
 // @desc    Get all products
 // @route   GET /api/products
@@ -112,21 +112,10 @@ const getProduct = async (req, res, next) => {
 const createProduct = async (req, res, next) => {
   // Add user to req.body
   req.body.user = req.user.id;
-
-  const uploadResults = await Promise.all(
-    req.files.map(async (file) => {
-      const result = await cloudinary.uploader.upload(file.path, {
-        folder: "product_images",
-        resource_type: "auto",
-      });
-      return {
-        image_url: result.secure_url,
-        public_id: result.public_id,
-      };
-    })
-  );
-
-  console.log("sssssssss", uploadresults)
+  if (req.file) {
+    req.body.image = req.file.path; // Cloudinary URL
+    req.body.imagePublicId = req.file.filename; // Cloudinary public_id
+  }
 
   const product = await Product.create(req.body);
 
@@ -156,6 +145,20 @@ const updateProduct = async (req, res, next) => {
         401
       )
     );
+  }
+
+  if (req.file) {
+    // Delete old image from Cloudinary if exists
+    if (product.imagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(product.imagePublicId);
+      } catch (err) {
+        console.error("Error deleting old image:", err);
+      }
+    }
+
+    req.body.image = req.file.path;
+    req.body.imagePublicId = req.file.filename;
   }
 
   // Save old stock for history
@@ -226,7 +229,7 @@ const deleteManyProducts = async (req, res, next) => {
 
   const result = await Product.deleteMany({
     _id: { $in: ids },
-    user: req.user.id, 
+    user: req.user.id,
   });
 
   res.status(200).json({
@@ -241,7 +244,7 @@ const deleteManyProducts = async (req, res, next) => {
 // @access  Private
 const importProducts = async (req, res, next) => {
   if (!req.file) {
-    return res.status(400).json({ message: 'No file uploaded' });
+    return res.status(400).json({ message: "No file uploaded" });
   }
 
   const filePath = req.file.path;
@@ -251,28 +254,29 @@ const importProducts = async (req, res, next) => {
 
   fs.createReadStream(filePath)
     .pipe(csv())
-    .on('data', (row) => {
-      
-      const isEmptyRow = !row.Name || !row.Name.trim() || 
-                        Object.values(row).every(value => !value || !value.toString().trim());
-      
+    .on("data", (row) => {
+      const isEmptyRow =
+        !row.Name ||
+        !row.Name.trim() ||
+        Object.values(row).every((value) => !value || !value.toString().trim());
+
       if (isEmptyRow) {
         emptyRowCount++;
-        return; 
+        return;
       }
 
       results.push({
         name: row.Name.trim(),
-        unit: row.Unit ? row.Unit.trim() : '',
-        category: row.Category ? row.Category.trim() : '',
-        brand: row.Brand ? row.Brand.trim() : '',
+        unit: row.Unit ? row.Unit.trim() : "",
+        category: row.Category ? row.Category.trim() : "",
+        brand: row.Brand ? row.Brand.trim() : "",
         stock: parseInt(row.Stock) || 0,
-        status: row.Status ? row.Status.trim() : '',
-        image: row.Image ? row.Image.trim() : '',
-        user: req.user.id
+        status: row.Status ? row.Status.trim() : "",
+        image: row.Image ? row.Image.trim() : "",
+        user: req.user.id,
       });
     })
-    .on('end', async () => {
+    .on("end", async () => {
       try {
         const addedProducts = [];
 
@@ -286,19 +290,19 @@ const importProducts = async (req, res, next) => {
           addedProducts.push(newProduct);
         }
 
-        fs.unlinkSync(filePath); 
+        fs.unlinkSync(filePath);
 
         res.json({
           addedCount: addedProducts.length,
           skippedCount: skippedCount,
-          emptyRowCount: emptyRowCount
+          emptyRowCount: emptyRowCount,
         });
       } catch (err) {
         fs.unlinkSync(filePath);
         res.status(500).json({ message: err.message });
       }
     })
-    .on('error', (err) => {
+    .on("error", (err) => {
       fs.unlinkSync(filePath);
       res.status(500).json({ message: err.message });
     });
