@@ -17,12 +17,13 @@ connectDB();
 const auth = require("./routes/auth.routes");
 const products = require("./routes/product.routes");
 const inventoryHistory = require("./routes/inventoryHistory.routes");
+const { CLIENT_URL } = require("./config/env.config");
 
 const app = express();
 
 // Enable CORS
 const corsOptions = {
-  origin: `${process.env.CLIENT_URL}` || "http://localhost:5173",
+  origin: `${CLIENT_URL}`,
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
