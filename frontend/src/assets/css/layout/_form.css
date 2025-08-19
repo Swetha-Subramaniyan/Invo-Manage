@@ -1,0 +1,115 @@
+.form-container {
+  max-width: var(--space-4xl);
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  margin-bottom: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.form-row > .form-group {
+  flex: 1 0 0%;
+  padding-right: var(--space-sm);
+  padding-left: var(--space-sm);
+  max-width: 100%;
+}
+
+.form-label {
+  display: inline-block;
+  margin-bottom: var(--space-sm);
+  color: var(--color-secondary);
+}
+
+.form-label-required::after {
+  content: "*";
+  color: var(--color-danger);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-base);
+  color: var(--color-primary-dark);
+  background-color: var(--color-bg-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.ship-checkbox{
+  height: 20px;
+}
+
+.form-control:focus {
+  color: var(--color-secondary);
+  background-color: var(--color-bg-light);
+  border-color: var(--color-primary-light);
+  outline: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-control::placeholder {
+  color: var(--color-secondary);
+  opacity: 1;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+  background-color: var(--color-bg);
+  opacity: 1;
+}
+
+textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+select.form-control {
+  appearance: none;
+}
+
+.form-check {
+  position: relative;
+  display: block;
+  padding-left: var(--space-sm);
+}
+
+.form-check-input {
+  position: absolute;
+  margin-left: -1.5rem;
+}
+
+.is-invalid .form-control {
+  border-color: var(--color-danger);
+}
+
+.is-invalid .invalid-feedback {
+  display: block;
+  color: var(--color-danger);
+}
+
+.is-valid .form-control {
+  border-color: var(--color-success);
+}
+
+.invalid-feedback {
+  display: none;
+  width: 100%;
+  margin-top: var(--space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-danger);
+}
+
+.form-text {
+  display: block;
+  margin-top: var(--space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary);
+}

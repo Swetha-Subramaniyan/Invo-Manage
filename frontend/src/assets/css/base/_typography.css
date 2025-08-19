@@ -1,0 +1,88 @@
+:root {
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-md: 1.125rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 1.75rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 5rem;
+
+  --font-weight-bold: 600;
+  --font-weight-bolder: 900;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --font-size-lg: 1rem;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+Link,
+a {
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  color: var(--color-primary);
+}
+
+
+p {
+  font-weight: 500;
+  text-align: justify;
+  hyphens: auto;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  color: var(--color-secondary-light);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+.text-animation {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  cursor: default;
+  transition: color var(--transition-fast), transform var(--transition-slow);
+}
+
+.text-animation::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 3px;
+  background-color: var(--color-secondary);
+  transition: width 0.3s ease;
+}
+
+.text-animation:hover {
+  transform: translateY(-2px);
+  color: var(--color-secondary);
+}
+
+.text-animation:hover::after {
+  width: 100%;
+}
+
+.tab-indent {
+  text-indent: var(--space-2xl);
+}

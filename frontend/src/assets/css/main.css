@@ -1,0 +1,37 @@
+@import url("./base/_reset.css");
+@import url("./base/_variables.css");
+@import url("./base/_typography.css");
+
+@import url("./component/_login.css");
+
+@import url("./layout/_header.css");
+@import url("./layout/_modal.css");
+@import url("./layout/_button.css");
+@import url("./layout/_form.css");
+@import url("./layout/_navigation.css");
+
+@import url("./pages/_dashboard.css");
+@import url("./pages/_inventory.css");
+@import url("./pages/_product.css");
+@import url("./pages/_profile.css");
+
+.app-container {
+  width: 100%;
+  padding-top: var(--space-3xl);
+  margin-top: var(--space-lg);
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+

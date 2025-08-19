@@ -1,0 +1,143 @@
+
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+   background: #fff;
+   border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+}
+
+.product-table th,
+.product-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.product-table th {
+  background-color: var(--color-secondary-lighter);
+  font-weight: 700;
+}
+
+.product-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.product-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.status-badge {
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.status-badge.in-stock {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.out-of-stock {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 6px 12px;
+  margin-right: 5px;
+  font-size: 14px;
+  width: auto;
+}
+
+.edit-btn {
+  background-color: #17a2b8;
+}
+
+.edit-btn:hover {
+  background-color: #138496;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.product-search-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.search-form {
+  display: flex;
+}
+
+.search-form .btn-customized {
+  border-radius: 10%;
+}
+
+/* Import/Export Styles */
+.import-export-container .btn-group {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  margin: var(--space-md);
+}
+
+.success-message {
+  color: #155724;
+  background-color: #d4edda;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .product-search-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-filter-section {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .search-form input {
+    width: 100%;
+  }
+
+  .product-table th,
+  .product-table td {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+}
+
+.product-table-container .btn-group {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  margin-bottom: var(--space-md);
+}

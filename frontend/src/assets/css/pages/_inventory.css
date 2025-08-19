@@ -1,0 +1,36 @@
+
+/* Inventory History Styles */
+.inventory-history-container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  margin-top: 30px;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.history-table th, 
+.history-table td {
+  padding: 10px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.history-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.positive-change {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.negative-change {
+  color: #dc3545;
+  font-weight: 600;
+}
