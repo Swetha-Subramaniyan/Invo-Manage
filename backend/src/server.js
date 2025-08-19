@@ -21,6 +21,7 @@ const { CLIENT_URL } = require("./config/env.config");
 
 const app = express();
 
+console.log("newwww change")
 // Enable CORS
 const corsOptions = {
   origin: `${CLIENT_URL}`,
